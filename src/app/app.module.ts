@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GeneroComponent } from './pages/genero/genero.component';
 import { PeliculaComponent } from './pages/pelicula/pelicula.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { GeneroDialogoComponent } from './pages/genero/genero-dialogo/genero-dialogo.component';
 
 import {FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -18,11 +18,22 @@ import { ComidaDialogoComponent } from './pages/comida/comida-dialogo/comida-dia
 import { VentaComponent } from './pages/venta/venta.component';
 
 import { FlexLayoutModule } from '@angular/flex-layout'; // para que sea responsive
-import {MatGridListModule} from '@angular/material/grid-list';
 import { ConsultaComponent } from './pages/consulta/consulta.component';
 import { ReporteComponent } from './pages/reporte/reporte.component';
-import { ConsultaDialogoComponent } from './pages/consulta/consulta-dialogo/consulta-dialogo.component'; // para las grillas
+import { ConsultaDialogoComponent } from './pages/consulta/consulta-dialogo/consulta-dialogo.component';
+import { LoginComponent } from './pages/login/login.component';
+import { Not401Component } from './pages/not401/not401.component';
+import { NuevoComponent } from './pages/login/nuevo/nuevo.component'; // para las grillas
+import { environment } from '../environments/environment';
+import { JwtModule } from '@auth0/angular-jwt';
+import { ServerErrorsInterceptor } from './_shared/server-errors.interceptor';
 
+export function tokenGetter() {
+  let tk = JSON.parse(sessionStorage.getItem(environment.TOKEN_NAME));
+  let token = tk != null ? tk.access_token : '';
+  //console.log(token);
+  return token;
+}
 
 
 @NgModule({
@@ -40,6 +51,9 @@ import { ConsultaDialogoComponent } from './pages/consulta/consulta-dialogo/cons
     ConsultaComponent,
     ReporteComponent,
     ConsultaDialogoComponent,
+    LoginComponent,
+    Not401Component,
+    NuevoComponent,
   ],
   entryComponents:[GeneroDialogoComponent,ConfiguracionDialogoComponent,ComidaDialogoComponent,ConsultaDialogoComponent],
   imports: [
@@ -51,9 +65,19 @@ import { ConsultaDialogoComponent } from './pages/consulta/consulta-dialogo/cons
     ReactiveFormsModule, // para formularios
 
     FlexLayoutModule,
-    MatGridListModule
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        whitelistedDomains: ['localhost:8085'],
+        blacklistedRoutes: ['http://localhost:8085/oauth/token']
+      }
+    })
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: ServerErrorsInterceptor,
+    multi: true,
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

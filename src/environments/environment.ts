@@ -6,6 +6,10 @@ export const environment = {
   production: false,
   HOST_URL: "http://localhost:8085",
   PRECIO_ENTRADA:'ENT',
+  REINTENTOS: 3,
+  TOKEN_AUTH_USERNAME: 'mitocineapp',
+  TOKEN_AUTH_PASSWORD: 'mito89codex',
+  TOKEN_NAME: 'access_token'
 };
 
 /*

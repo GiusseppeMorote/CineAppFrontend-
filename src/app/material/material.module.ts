@@ -25,7 +25,9 @@ import {
   MatStepperModule,
   MatCheckboxModule,
   MatListModule,
-  MatChipsModule
+  MatGridListModule,
+  MatChipsModule,
+  MatTabsModule,
 } from "@angular/material";
 
 @NgModule({
@@ -54,9 +56,11 @@ import {
     MatSelectModule,
 
     MatStepperModule,
+    MatGridListModule,
     MatCheckboxModule,
     MatListModule,
-    MatChipsModule
+    MatChipsModule,
+    MatTabsModule
   ],
   exports: [
     MatButtonModule,
@@ -80,9 +84,11 @@ import {
     MatSelectModule,
 
     MatStepperModule,
+    MatGridListModule,
     MatCheckboxModule,
     MatListModule,
-    MatChipsModule
+    MatChipsModule,
+    MatTabsModule
   ],
   providers:[
     { provide: MAT_DATE_LOCALE, useValue: 'es-Es' }
